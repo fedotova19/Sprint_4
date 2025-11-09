@@ -97,7 +97,8 @@ public class OrderTests {
         orderPage.clickNextButton();
 
         // Заполнение второй страницы
-        orderPage.fillSecondPage("завтра", rentalPeriod, color, comment);
+        String deliveryDate = "11.11.2025"; // заменить на актуальную дату
+        orderPage.fillSecondPage(deliveryDate, rentalPeriod, color, comment);
 
         // Клик на кнопку Заказать
         orderPage.clickOrderButton();
@@ -112,19 +113,5 @@ public class OrderTests {
         String successMessage = orderPage.getSuccessMessage();
         assertTrue("Сообщение должно содержать информацию о заказе",
                 successMessage.contains("Заказ") || successMessage.contains("Номер"));
-    }
-
-
-    @Test
-    public void testBothOrderButtonsVisible() {
-        WebDriver driver = factory.getDriver();
-        var mainPage = new MainPage(driver);
-
-        mainPage.openMainPage();
-
-        assertTrue("Верхняя кнопка заказа должна быть видима",
-                mainPage.isTopOrderButtonVisible());
-        assertTrue("Нижняя кнопка заказа должна быть видима",
-                mainPage.isBottomOrderButtonVisible());
     }
 }

@@ -31,7 +31,7 @@ public class OrderPage {
     private By deliveryDateField = By.xpath(".//input[@placeholder='* Когда привезти самокат']");
 
     // Дата Завтра в календаре
-    private By tomorrowDate = By.xpath(".//div[contains(@class, 'react-datepicker__day--today')]/following-sibling::div[1]");
+    //private By tomorrowDate = By.xpath(".//div[contains(@class, 'react-datepicker__day--today')]/following-sibling::div[1]");
     private By rentalPeriodField = By.xpath(".//div[text()='* Срок аренды']");
 
     // Срок аренды в выпадающем списке
@@ -47,10 +47,7 @@ public class OrderPage {
     private By confirmOrderButton = By.xpath(".//button[text()='Да']");
 
     // Окно успешного оформления заказа
-    private By successModal = By.xpath(".//div[contains(@class, 'Order_ModalHeader')]");
-
-    // Сообщение об успешном оформлении заказа
-    private By successMessage = By.xpath(".//div[contains(@class, 'Order_ModalHeader')]");
+    private By successOrderModal = By.xpath(".//div[contains(@class, 'Order_ModalHeader')]");
 
 
     public OrderPage(WebDriver driver) {
@@ -94,7 +91,7 @@ public class OrderPage {
         wait.until(ExpectedConditions.visibilityOfElementLocated(deliveryDateField));
     }
 
-    //Заполнение второй страницы формы заказа
+    //Заполнение второй страницы формы заказа (с 08.11 перестал работать локатор для выбора даты, пришлось добавить обходное решение, изначальный код закомментирован)
     public void fillSecondPage(String deliveryDate, String rentalPeriod, String color, String comment) {
         // Выбор даты доставки
         // Клик на поле даты
@@ -102,8 +99,56 @@ public class OrderPage {
         dateField.click();
 
         // Выбираем дату Завтра
-        WebElement tomorrow = wait.until(ExpectedConditions.elementToBeClickable(tomorrowDate));
-        tomorrow.click();
+        //WebElement tomorrow = wait.until(ExpectedConditions.elementToBeClickable(tomorrowDate));
+        //tomorrow.click();
+
+
+        // Ожидание загрузки календаря
+        wait.until(ExpectedConditions.visibilityOfElementLocated(By.className("react-datepicker")));
+
+        // Поиск даты разными способами
+        boolean dateSelected = false;
+
+        // Способ 1: CSS локатор
+        try {
+            By tomorrowDate = By.cssSelector(".react-datepicker__day--today + .react-datepicker__day");
+            WebElement tomorrow = wait.until(ExpectedConditions.elementToBeClickable(tomorrowDate));
+            tomorrow.click();
+            dateSelected = true;
+            System.out.println("Дата выбрана через CSS локатор");
+        } catch (Exception e) {
+            System.out.println("CSS локатор не сработал: " + e.getMessage());
+        }
+
+        // Способ 2: XPath локатор (резервный)
+        if (!dateSelected) {
+            try {
+                By tomorrowDate = By.xpath("//div[contains(@class, 'react-datepicker__day--today')]/following-sibling::div[1]");
+                WebElement tomorrow = wait.until(ExpectedConditions.elementToBeClickable(tomorrowDate));
+                tomorrow.click();
+                dateSelected = true;
+                System.out.println("Дата выбрана через XPath локатор");
+            } catch (Exception e) {
+                System.out.println("XPath локатор не сработал: " + e.getMessage());
+            }
+        }
+
+        // Способ 3: Ввод даты текстом
+        if (!dateSelected) {
+            try {
+                dateField.clear();
+                // Используем конкретную дату (завтра)
+                dateField.sendKeys("10.11.2025");
+                // Клик вне поля чтобы закрыть календарь
+                driver.findElement(By.tagName("body")).click();
+                dateSelected = true;
+                System.out.println("Дата введена текстом");
+            } catch (Exception e) {
+                System.out.println("Ввод текстом не сработал: " + e.getMessage());
+                throw new RuntimeException("Не удалось выбрать дату доставки", e);
+            }
+        }
+
 
         // ВЫбор срока аренды
         // Клик на поле срока аренды
@@ -129,7 +174,9 @@ public class OrderPage {
             greyCheckbox.click();
         }
 
-        driver.findElement(commentField).sendKeys(comment);
+        WebElement commentElement = wait.until(ExpectedConditions.elementToBeClickable(commentField));
+        commentElement.clear();
+        commentElement.sendKeys(comment);
     }
 
     //Нажатие кнопки Заказать на второй странице
@@ -148,10 +195,10 @@ public class OrderPage {
     public boolean isOrderSuccess() {
         try {
             // Ожидание окна успеха
-            wait.until(ExpectedConditions.visibilityOfElementLocated(successModal));
+            wait.until(ExpectedConditions.visibilityOfElementLocated(successOrderModal));
 
             // Проверка отображения сообщения
-            return driver.findElement(successMessage).isDisplayed();
+            return driver.findElement(successOrderModal).isDisplayed();
         } catch (Exception e) {
             return false;
         }
@@ -159,7 +206,7 @@ public class OrderPage {
 
     //Получение текста сообщения об успешном оформлении заказа
     public String getSuccessMessage() {
-        return wait.until(ExpectedConditions.visibilityOfElementLocated(successMessage)).getText();
+        return wait.until(ExpectedConditions.visibilityOfElementLocated(successOrderModal)).getText();
     }
 
     //Ожидание полной загрузки страницы оформления заказа
