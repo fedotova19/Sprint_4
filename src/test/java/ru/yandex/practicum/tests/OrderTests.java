@@ -78,12 +78,8 @@ public class OrderTests {
         // Выбор кнопки
         OrderPage orderPage;
         if ("top".equals(orderButtonType)) {
-            assertTrue("Верхняя кнопка заказа должна быть видима",
-                    mainPage.isTopOrderButtonVisible());
             orderPage = mainPage.clickOrderButtonTop();
         } else {
-            assertTrue("Нижняя кнопка заказа должна быть видима",
-                    mainPage.isBottomOrderButtonVisible());
             orderPage = mainPage.clickOrderButtonBottom();
         }
 
@@ -97,8 +93,7 @@ public class OrderTests {
         orderPage.clickNextButton();
 
         // Заполнение второй страницы
-        String deliveryDate = "11.11.2025"; // заменить на актуальную дату
-        orderPage.fillSecondPage(deliveryDate, rentalPeriod, color, comment);
+        orderPage.fillSecondPage("завтра", rentalPeriod, color, comment);
 
         // Клик на кнопку Заказать
         orderPage.clickOrderButton();

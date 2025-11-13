@@ -31,7 +31,7 @@ public class OrderPage {
     private By deliveryDateField = By.xpath(".//input[@placeholder='* Когда привезти самокат']");
 
     // Дата Завтра в календаре
-    //private By tomorrowDate = By.xpath(".//div[contains(@class, 'react-datepicker__day--today')]/following-sibling::div[1]");
+    private By tomorrowDate = By.xpath(".//div[contains(@class, 'react-datepicker__day--today')]/following-sibling::div[1]");
     private By rentalPeriodField = By.xpath(".//div[text()='* Срок аренды']");
 
     // Срок аренды в выпадающем списке
@@ -99,55 +99,8 @@ public class OrderPage {
         dateField.click();
 
         // Выбираем дату Завтра
-        //WebElement tomorrow = wait.until(ExpectedConditions.elementToBeClickable(tomorrowDate));
-        //tomorrow.click();
-
-
-        // Ожидание загрузки календаря
-        wait.until(ExpectedConditions.visibilityOfElementLocated(By.className("react-datepicker")));
-
-        // Поиск даты разными способами
-        boolean dateSelected = false;
-
-        // Способ 1: CSS локатор
-        try {
-            By tomorrowDate = By.cssSelector(".react-datepicker__day--today + .react-datepicker__day");
-            WebElement tomorrow = wait.until(ExpectedConditions.elementToBeClickable(tomorrowDate));
-            tomorrow.click();
-            dateSelected = true;
-            System.out.println("Дата выбрана через CSS локатор");
-        } catch (Exception e) {
-            System.out.println("CSS локатор не сработал: " + e.getMessage());
-        }
-
-        // Способ 2: XPath локатор (резервный)
-        if (!dateSelected) {
-            try {
-                By tomorrowDate = By.xpath("//div[contains(@class, 'react-datepicker__day--today')]/following-sibling::div[1]");
-                WebElement tomorrow = wait.until(ExpectedConditions.elementToBeClickable(tomorrowDate));
-                tomorrow.click();
-                dateSelected = true;
-                System.out.println("Дата выбрана через XPath локатор");
-            } catch (Exception e) {
-                System.out.println("XPath локатор не сработал: " + e.getMessage());
-            }
-        }
-
-        // Способ 3: Ввод даты текстом
-        if (!dateSelected) {
-            try {
-                dateField.clear();
-                // Используем конкретную дату (завтра)
-                dateField.sendKeys("10.11.2025");
-                // Клик вне поля чтобы закрыть календарь
-                driver.findElement(By.tagName("body")).click();
-                dateSelected = true;
-                System.out.println("Дата введена текстом");
-            } catch (Exception e) {
-                System.out.println("Ввод текстом не сработал: " + e.getMessage());
-                throw new RuntimeException("Не удалось выбрать дату доставки", e);
-            }
-        }
+        WebElement tomorrow = wait.until(ExpectedConditions.elementToBeClickable(tomorrowDate));
+        tomorrow.click();
 
 
         // ВЫбор срока аренды
