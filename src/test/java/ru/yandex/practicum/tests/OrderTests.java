@@ -83,9 +83,6 @@ public class OrderTests {
             orderPage = mainPage.clickOrderButtonBottom();
         }
 
-        // Ожидание загрузки страницы
-        orderPage.waitForOrderPageLoaded();
-
         // Заполнение первой страницы заказа
         orderPage.fillFirstPage(name, surname, address, "Сокольники", phone);
 
@@ -93,7 +90,8 @@ public class OrderTests {
         orderPage.clickNextButton();
 
         // Заполнение второй страницы
-        orderPage.fillSecondPage("завтра", rentalPeriod, color, comment);
+        String deliveryDate = "20.11.2025"; // конкретная дата
+        orderPage.fillSecondPage(deliveryDate, rentalPeriod, color, comment);
 
         // Клик на кнопку Заказать
         orderPage.clickOrderButton();

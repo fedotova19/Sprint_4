@@ -1,6 +1,7 @@
 package ru.yandex.practicum.pages;
 
 import org.openqa.selenium.By;
+import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -31,7 +32,6 @@ public class OrderPage {
     private By deliveryDateField = By.xpath(".//input[@placeholder='* Когда привезти самокат']");
 
     // Дата Завтра в календаре
-    private By tomorrowDate = By.xpath(".//div[contains(@class, 'react-datepicker__day--today')]/following-sibling::div[1]");
     private By rentalPeriodField = By.xpath(".//div[text()='* Срок аренды']");
 
     // Срок аренды в выпадающем списке
@@ -96,12 +96,12 @@ public class OrderPage {
         // Выбор даты доставки
         // Клик на поле даты
         WebElement dateField = wait.until(ExpectedConditions.elementToBeClickable(deliveryDateField));
+
+        // Кликаем и сразу вводим дату
         dateField.click();
+        dateField.sendKeys(deliveryDate);
 
-        // Выбираем дату Завтра
-        WebElement tomorrow = wait.until(ExpectedConditions.elementToBeClickable(tomorrowDate));
-        tomorrow.click();
-
+        dateField.sendKeys(Keys.ENTER);
 
         // ВЫбор срока аренды
         // Клик на поле срока аренды

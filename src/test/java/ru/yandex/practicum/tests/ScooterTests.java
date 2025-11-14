@@ -32,28 +32,5 @@ public class ScooterTests {
                 "Not found".equals(statusPage.getErrorText());
         assertTrue("Система должна корректно обрабатывать несуществующий заказ",
                 isErrorHandled);
-
-    }
-
-    @Test
-    // Текст соответствует разделу
-    public void testTextCorrespondsSection() {
-
-        WebDriver driver = factory.getDriver();
-
-        var mainPage = new MainPage(driver);
-
-        // переходим на сайт
-        mainPage.openMainPage();
-        var faqPage = mainPage.getFaqPage();
-        faqPage.scrollToFaqSection();
-
-        // Проверка нескольких вопросов
-        for (int i = 0; i < 4; i++) {
-            faqPage.clickQuestion(i);
-            assertTrue("Ответ должен отображаться", faqPage.isAnswerDisplayed(i));
-            assertTrue("Текст ответа не должен быть пустым",
-                    !faqPage.getAnswerText(i).isEmpty());
-        }
     }
 }

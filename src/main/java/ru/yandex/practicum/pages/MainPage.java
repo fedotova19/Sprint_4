@@ -81,13 +81,6 @@ public class MainPage {
         return new OrderPage(driver);
     }
 
-    public void scrollToBottomOrderButton() {
-        WebElement bottomButton = wait.until(ExpectedConditions.presenceOfElementLocated(orderButtonBottom));
-
-        // Прокрутка
-        ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", bottomButton);
-    }
-
     // Проверка видимости верхней кнопки Заказать
     public boolean isTopOrderButtonVisible() {
         try {
