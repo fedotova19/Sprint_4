@@ -80,31 +80,4 @@ public class MainPage {
 
         return new OrderPage(driver);
     }
-
-    // Проверка видимости верхней кнопки Заказать
-    public boolean isTopOrderButtonVisible() {
-        try {
-            WebElement topBtn = wait.until(ExpectedConditions.visibilityOfElementLocated(orderButtonTop));
-            return topBtn.isDisplayed();
-        } catch (Exception e) {
-            return false;
-        }
-    }
-
-    // Проверка видимости нижней кнопки Заказать после прокрутки
-    public boolean isBottomOrderButtonVisible() {
-        try {
-            WebElement bottomButton = wait.until(ExpectedConditions.presenceOfElementLocated(orderButtonBottom));
-
-            // Прокрутка
-            ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", bottomButton);
-
-            // Ожидание видимости после прокрутки
-            WebElement visibleButton = wait.until(ExpectedConditions.visibilityOf(bottomButton));
-            return visibleButton.isDisplayed();
-
-        } catch (Exception e) {
-            return false;
-        }
-    }
 }

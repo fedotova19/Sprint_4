@@ -23,7 +23,6 @@ public class StatusPage {
         }
     }
 
-    // Метод для получения текста ошибки
     public String getErrorText() {
         try {
             WebElement errorImg = driver.findElement(errorImage);

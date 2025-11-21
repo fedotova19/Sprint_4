@@ -19,7 +19,6 @@ public class FaqPage {
     private final WebDriverWait wait;
 
 
-    private By faqSectionTitle = By.className("Home_SubHeader__zwi_E");
     // Кнопки вопросов (стрелочки)
     private By questionButtons = By.cssSelector("[data-accordion-component='AccordionItemButton']");
     private By answerTexts = By.cssSelector("[data-accordion-component='AccordionItemPanel']");
@@ -30,7 +29,7 @@ public class FaqPage {
     }
 
     public void scrollToFaqSection() {
-        WebElement faqElement = wait.until(ExpectedConditions.visibilityOfElementLocated(faqSectionTitle));
+        WebElement faqElement = wait.until(ExpectedConditions.visibilityOfElementLocated(questionButtons));
         ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", faqElement);
     }
 
@@ -85,9 +84,7 @@ public class FaqPage {
         return false;
     }
 
-    // Ожидание полной загрузки FAQ раздела
     public void waitForFaqSectionLoaded() {
-        wait.until(ExpectedConditions.visibilityOfElementLocated(faqSectionTitle));
         wait.until(ExpectedConditions.numberOfElementsToBeMoreThan(questionButtons, 0));
     }
 }

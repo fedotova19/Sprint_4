@@ -161,9 +161,4 @@ public class OrderPage {
     public String getSuccessMessage() {
         return wait.until(ExpectedConditions.visibilityOfElementLocated(successOrderModal)).getText();
     }
-
-    //Ожидание полной загрузки страницы оформления заказа
-    public void waitForOrderPageLoaded() {
-        wait.until(ExpectedConditions.visibilityOfElementLocated(nameField));
-    }
 }
